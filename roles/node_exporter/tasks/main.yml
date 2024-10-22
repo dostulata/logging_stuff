@@ -1,0 +1,18 @@
+---
+- name: Install Node-Exporter Package
+  ansible.builtin.apt:
+    name: prometheus-node-exporter
+    update_cache: yes
+    install_recommends: false
+
+- name: Create tmp Directory on Prometheus Server
+  ansible.builtin.file:
+    path: "/tmp/node-jobs"
+    state: directory
+  delegate_to: prometheus_server
+
+- name: Create Job File on Prometheus Server
+  ansible.builtin.template:
+    src: job.j2
+    dest: "/tmp/node-jobs/job_{{ ansible_host }}.yml"
+  delegate_to: prometheus_server

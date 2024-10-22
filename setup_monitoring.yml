@@ -1,0 +1,15 @@
+---
+- hosts: node_exporter
+  roles:
+    - role: node_exporter
+
+- hosts: prometheus
+  roles:
+    - role: prometheus
+
+- hosts: efk_stack
+  roles:
+    - geerlingguy.java
+    - geerlingguy.elasticsearch
+    - geerlingguy.kibana
+    - fluentbit    

@@ -1,0 +1,15 @@
+main_config_path: '/etc/prometheus/prometheus.yml'
+
+prometheus_global:
+  scrape_interval: 15s
+  scrape_timeout: 10s
+  evaluation_interval: 15s
+
+self_monitoring_job_name: 'prometheus'
+self_monitoring_metrics_path: '/metrics'
+self_monitoring_scheme: 'http'
+self_monitoring_scrape_interval: '5s'
+self_monitoring_scrape_timeout: '5s'
+self_monitoring_target: '{{ ansible_host }}:9090'
+
+file_sd_path: "/etc/prometheus/file-sd"

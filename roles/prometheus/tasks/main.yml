@@ -1,0 +1,32 @@
+---
+- name: Install Prometheus Package
+  ansible.builtin.apt:
+    name: prometheus
+    update_cache: yes
+    install_recommends: false
+  when: not skip_install or skip_install is undefined
+
+- name: Create config
+  ansible.builtin.template:
+    src: prometheus.j2
+    dest: "{{ main_config_path }}"
+  notify:
+    - reload prometheus
+  tags:
+    - configure
+  when: not skip_install or skip_install is undefined
+
+- name: Create file-sd dir
+  ansible.builtin.file:
+    path: "{{ file_sd_path }}"
+    state: directory
+  tags:
+    - configure
+
+- name: Apply file-sd configs
+  ansible.builtin.copy:
+    src: /tmp/node-jobs/
+    dest: "{{ file_sd_path }}"
+    remote_src: yes
+  tags:
+    - configure

@@ -1,0 +1,26 @@
+---
+- name: Check if fluent config is in place
+  ansible.builtin.stat:
+    path: "/etc/fluent-bit/fluent-bit.conf"
+  register: fbit_config
+
+- name: Download fluent script
+  ansible.builtin.get_url:
+    url: "https://raw.githubusercontent.com/fluent/fluent-bit/master/install.sh"
+    dest: /tmp/install.sh
+    mode: '0770'
+  when: not fbit_config.stat.exists
+
+- name: Launch install script
+  ansible.builtin.shell: /tmp/install.sh
+
+- name: Create Config File
+  ansible.builtin.template:
+    src: fluent-bit.j2
+    dest: "/etc/fluent-bit/fluent-bit.conf"
+
+- name: Start and enable service
+  ansible.builtin.service:
+    name: fluent-bit
+    state: started
+    enabled: true

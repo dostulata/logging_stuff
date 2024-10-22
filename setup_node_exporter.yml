@@ -1,0 +1,12 @@
+---
+- hosts: node_exporter
+  roles:
+    - role: node_exporter
+
+- hosts: prometheus_server
+  tasks:
+    - name: Include Prometheus role
+      ansible.builtin.include_role:
+        name: prometheus
+      vars:
+        skip_install: True

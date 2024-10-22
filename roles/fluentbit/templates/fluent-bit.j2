@@ -1,0 +1,44 @@
+{{ ansible_managed | comment }}
+
+[SERVICE]
+    # Flush
+    # =====
+    # set an interval of seconds before to flush records to a destination
+    flush        1
+
+    # Daemon
+    # ======
+    # instruct Fluent Bit to run in foreground or background mode.
+    daemon       Off
+
+    # Log_Level
+    # =========
+    # Set the verbosity level of the service, values can be:
+    #
+    # - error
+    # - warning
+    # - info
+    # - debug
+    # - trace
+    #
+    # by default 'info' is set, that means it includes 'error' and 'warning'.
+    log_level    info
+
+    # Parsers File
+    # ============
+    # specify an optional 'Parsers' configuration file
+    parsers_file parsers.conf
+
+    # Plugins File
+    # ============
+    # specify an optional 'Plugins' configuration file to load external plugins.
+    plugins_file plugins.conf
+
+[INPUT]
+    name systemd
+
+[OUTPUT]
+    name  es
+    match *
+    Host 127.0.0.1
+    Port 9200
